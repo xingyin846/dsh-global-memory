@@ -8,6 +8,7 @@ import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { DatabaseSync } from "node:sqlite";
 import { MemoryDb, buildInjectionBody, setGmRuntime, gmRunForget, memoryDbPath, search, gmStatusWeight, setGmScope, gmSetActor } from "../lib/index.js";
+import { resolveHome, resolveMarker } from "./dbpath.mjs";
 
 // 自检只读/只写副本，绝不改写生产标记文件
 process.env.GM_NO_MARKER = "1";
@@ -15,8 +16,8 @@ process.env.GM_NO_PROMPT = "1";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, "..");
-const HOME = process.env.USERPROFILE ?? "C:/Users/13357";
-const RUNTIME = join(HOME, ".dsh-meow", "gm-runtime.json");
+const HOME = resolveHome();
+const RUNTIME = join(HOME, "gm-runtime.json");
 const TMP = join(tmpdir(), "gm-verify");
 const COPY = join(TMP, "memory.db");
 const ARCHIVE = join(TMP, "archive");
