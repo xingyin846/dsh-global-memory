@@ -184,13 +184,13 @@ edit(
 // ---------------------------------------------------------------------------
 // 7) 插件名
 // ---------------------------------------------------------------------------
-edit("plugin-name", 'var name = "meow-memory";', 'var name = "global_memory";');
+edit("plugin-name", 'var name = "meow-memory";', 'var name = "@xxmy/dsh-global-memory";');
 
 // ---------------------------------------------------------------------------
 // 7b) 设置命名空间：宿主按插件名注册 settings section（实测 ns 列表里出现 global_memory），
 //     服务端读写层必须跟着改，否则设置页读到空层。
 // ---------------------------------------------------------------------------
-edit("settings-ns", 'var SETTINGS_NS = "meow-memory";', 'var SETTINGS_NS = "global_memory";');
+edit("settings-ns", 'var SETTINGS_NS = "meow-memory";', 'var SETTINGS_NS = "@xxmy/dsh-global-memory";');
 
 // ---------------------------------------------------------------------------
 // 7) apply：解析完配置后写入 gm 运行时（库路径/注入上限/遗忘配置）
@@ -775,12 +775,12 @@ if (existsSync(clientUpstream)) {
   let client = readFileSync(clientUpstream, "utf8");
   const clientEdits = [
     // 客户端插件 id 必须 = 包名（宿主按包名等它注册；实测 @linxin666/dsh-pet 的 client id 就是包名）
-    ['window.__ModuleLoader__.load({\n  id: "meow-memory",', 'window.__ModuleLoader__.load({\n  id: "global_memory",'],
-    ['var NS = "meow-memory";', 'var NS = "global_memory";'],
-    ['var SETTINGS_NS = "meow-memory";', 'var SETTINGS_NS = "global_memory";'],
-    ['row?.ns === "meow-memory"', 'row?.ns === "global_memory"'],
-    ['remote.mutate("meow-memory",', 'remote.mutate("global_memory",'],
-    ['remote.update("meow-memory",', 'remote.update("global_memory",']
+    ['window.__ModuleLoader__.load({\n  id: "meow-memory",', 'window.__ModuleLoader__.load({\n  id: "@xxmy/dsh-global-memory",'],
+    ['var NS = "meow-memory";', 'var NS = "@xxmy/dsh-global-memory";'],
+    ['var SETTINGS_NS = "meow-memory";', 'var SETTINGS_NS = "@xxmy/dsh-global-memory";'],
+    ['row?.ns === "meow-memory"', 'row?.ns === "@xxmy/dsh-global-memory"'],
+    ['remote.mutate("meow-memory",', 'remote.mutate("@xxmy/dsh-global-memory",'],
+    ['remote.update("meow-memory",', 'remote.update("@xxmy/dsh-global-memory",']
   ];
   for (const [find, repl] of clientEdits) {
     const n = countOf(client, find);
