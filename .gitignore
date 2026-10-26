@@ -1,0 +1,6 @@
+node_modules/
+*.tgz
+release/
+lib/*.bak-*
+.DS_Store
+Thumbs.db

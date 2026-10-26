@@ -1,0 +1,5 @@
+# global_memory bundle patch: inserts this plugin into a profile's layer stack.
+# 与上游 meow-memory 的补丁相同结构，只是 id/name 换成 global_memory。
+- insert:
+    - id: global_memory
+      name: 'global_memory'

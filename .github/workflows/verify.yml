@@ -1,0 +1,19 @@
+name: verify
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.5"
+      - name: 自检（自带夹具，不依赖本机生产库）
+        run: node tools/verify.mjs
+        env:
+          GM_NO_PROMPT: "1"
+          GM_NO_MARKER: "1"
