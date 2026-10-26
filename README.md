@@ -2,6 +2,43 @@
 
 > DeepSeek Harness 的「全局记忆」插件。基于 [meow-memory](https://github.com/Phant0Meow/dsh-meow-memory) 0.31.1 的 fork（MIT），
 > 增加共享库、注入收窄、三层遗忘、审计版本表与房间可见性。
+>
+> 仓库：<https://github.com/xingyin846/dsh-global-memory>
+
+## ⚠️ 记忆存在哪里（装完必读）
+
+**默认不是全局。** 位置只看 `dbPath` 这一个配置：
+
+| 情况 | 记忆库落在哪 | 是否真全局 |
+|---|---|---|
+| 装完**不配置** | **每个工作区各一份**：`<工作区>/.dsh-meow/memory.db` | ❌ 换工作区看不到彼此 |
+| 配了 `dbPath` 绝对路径 | 那**一个文件**，所有工作区共用 | ✅ 真全局 |
+| 只在一个工作区用 | 该工作区的 `.dsh-meow/memory.db` | ⚠️ 像是全局，其实只有一份库 |
+
+代码就是这么判的：
+
+```js
+if (dbPath 非空) return dbPath;                    // 配了 = 全局
+return join(工作区, projectDir, "memory.db");      // 没配 = 按工作区
+```
+
+**两个容易混淆的地方**：
+
+1. `homeDir`（默认 `~/.dsh-meow`）只放 `gm-runtime.json` / `perf.log` / `window-index.json` 这类**实例级日志**，**不是记忆**；
+2. 记忆上的 `project: "全局"` **只是分类标签**，不代表物理全局 —— 没配 `dbPath` 时，它只存在“写它的那个工作区”的库里。
+
+### 想开箱即全局？三条建议
+
+1. **配一个绝对路径**（最稳）：
+   ```yaml
+   - id: global_memory
+     config:
+       dbPath: 'C:\\Users\\<你>\\.dsh-memory\\memory.db'
+       homeDir: 'C:\\Users\\<你>\\.dsh-memory'   # 可选：日志也放一起
+   ```
+   ⚠️ 当前版本**不支持 `~` 展开**，请写绝对路径；改完必须重启 DSH。
+2. **装完先自检**：`node tools/doctor.mjs`，第一行就会打印 `dbPath=` —— 一看就知道自己是“全局”还是“按工作区”。
+3. **多台机器别共用同一个库文件**：本插件没有跨机同步，共用网盘同步 SQLite 会锁冲突；要跨机请用备份/合并，不要直接共享文件夹。
 
 ## 它解决什么
 

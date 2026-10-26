@@ -26,6 +26,9 @@
     "CHANGELOG.md",
     "LICENSE"
   ],
+  "repository": { "type": "git", "url": "git+https://github.com/xingyin846/dsh-global-memory.git" },
+  "homepage": "https://github.com/xingyin846/dsh-global-memory",
+  "bugs": { "url": "https://github.com/xingyin846/dsh-global-memory/issues" },
   "license": "MIT",
   "dsh": {
     "bundle": { "patch": "./cordis.patch.yml" },
